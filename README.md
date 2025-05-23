@@ -50,6 +50,7 @@
 
 ## PlayerController
   - Die가 되면 this.enabled = false로 스크립트 비활성화로 정지
+  - CursorLockMode을 사용한 마우스 커서 숨기기
   - inputAction을 사용한 조작 구현
 ---
 
