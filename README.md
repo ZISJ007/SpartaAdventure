@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/44390830-2345-4a72-8ff5-90b114ec2e12)## 🎮조작 키
+## 🎮조작 키
 wasd : 이동
 space : 점프
 F : 상호작용
