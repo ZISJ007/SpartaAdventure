@@ -18,7 +18,6 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    // 나중에 수정될 경우를 고려하여 원본(_player)과 접근(Player)을 구별
     public Player Player
     {
         get { return _player; }

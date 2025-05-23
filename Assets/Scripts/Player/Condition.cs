@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Condition 개별 바는 같은 로직을 공유
-// 코드 재활용을 위해 개별 스크립트로 작업
 public class Condition : MonoBehaviour
 {
     public float curValue;

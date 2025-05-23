@@ -1,4 +1,4 @@
-﻿// InventoryManager.cs
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(ItemData newItem)
     {
-        // 1) 이미 같은 아이템이 있는 슬롯 찾기
+        // 이미 같은 아이템이 있는 슬롯 찾기
         var exitSlot = slots.Find(s => !s.IsEmpty && s.HasItem(newItem));
         if (exitSlot != null)
         {
@@ -30,7 +30,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        // 2) 빈 슬롯 찾기
+        // 빈 슬롯 찾기
         var empty = slots.Find(s => s.IsEmpty);
         if (empty != null)
         {
@@ -38,7 +38,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        // 3) 빈 슬롯이 없으면 경고
+        //빈 슬롯이 없으면 경고
         Debug.LogWarning("인벤토리 슬롯이 가득 찼습니다!");
     }
 }

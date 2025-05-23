@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f; // 반경
     [SerializeField] private LayerMask groundLayerMask;     // 땅 레이어
 
-    // 이 속도보다 더 빠르게 아래로 움직일 때만 falling
 
     private Vector2 mouseDelta;  // 마우스 변화값
 

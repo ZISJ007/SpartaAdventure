@@ -75,13 +75,13 @@ public class ItemSlot : MonoBehaviour
                     break;
             }
         }
-            // TODO: 실제 아이템 사용 로직
+
             itemCount--;
         UpdateUI();
 
         if (itemCount <= 0)
         {
-            // 사용 후 완전 소모 → 슬롯 초기화
+            // 사용 후 완전 소모 > 슬롯 초기화
             itemData = null;
             itemCount = 0;
             UpdateUI();
@@ -89,8 +89,8 @@ public class ItemSlot : MonoBehaviour
     }
     private IEnumerator SpeedBuff(PlayerController player)
     {
-        float originalSpeed = player.moveSpeed;
-        player.moveSpeed += originalSpeed + itemData.plusValue; // 예: 속도 50% 증가
+        float originalSpeed = player.moveSpeed; // 플레이어의 원래 이동 속도
+        player.moveSpeed += originalSpeed + itemData.plusValue; 
         yield return new WaitForSeconds(3);
         player.moveSpeed = originalSpeed;
     }
