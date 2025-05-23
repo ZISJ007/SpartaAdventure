@@ -1,49 +1,44 @@
-﻿using System.Collections;
+﻿// InventoryManager.cs
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class InventoryMananager : MonoBehaviour
+public class InventoryManager : MonoBehaviour
 {
-    public static InventoryMananager Instance;
+    public static InventoryManager Instance;
 
-    public Transform ItemSlotParent;
+    public Transform itemSlotParent;
 
-
-    private List<ItemSlot> slots = new List<ItemSlot>();
-
+    // 씬에 붙어 있는 ItemSlot 컴포넌트 3개
+    private List<ItemSlot> slots;
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(this.gameObject);
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+
+        slots = new List<ItemSlot>(itemSlotParent.GetComponentsInChildren<ItemSlot>());
+
     }
 
     public void AddItem(ItemData newItem)
     {
-        ItemSlot exitsSlot = null;
-
-        for (int i = 0; i < slots.Count; i++)
+        // 1) 이미 같은 아이템이 있는 슬롯 찾기
+        var exitSlot = slots.Find(s => !s.IsEmpty && s.HasItem(newItem));
+        if (exitSlot != null)
         {
-            if (slots[i] != null && slots[i].HasItem(newItem) == true)
-            {
-                exitsSlot = slots[i];
-                break;
-            }
+            exitSlot.AddCount(1);
+            return;
         }
 
-        if (exitsSlot != null)
+        // 2) 빈 슬롯 찾기
+        var empty = slots.Find(s => s.IsEmpty);
+        if (empty != null)
+        {
+            empty.SetUp(newItem, 1);
+            return;
+        }
 
-        {
-            exitsSlot.AddCount(1);
-        }
-        else
-        {
-            ItemSlot itemslot = GetComponent<ItemSlot>();
-            itemslot.SetUp(newItem);
-            slots.Add(itemslot);
-        }
+        // 3) 빈 슬롯이 없으면 경고
+        Debug.LogWarning("인벤토리 슬롯이 가득 찼습니다!");
     }
 }

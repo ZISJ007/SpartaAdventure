@@ -9,9 +9,9 @@ public class Item : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && Input.GetKey(KeyCode.F))
         {
-            InventoryMananager.Instance.AddItem(itemData);
+            InventoryManager.Instance.AddItem(itemData); // 인벤토리에 아이템 추가
             Destroy(this.gameObject);
         }
     }
