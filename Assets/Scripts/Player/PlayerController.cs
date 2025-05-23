@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     private Vector2 curMovementInput;  // 현재 입력 값
     public float jumpPower;
-    public LayerMask groundLayerMask;  // 레이어 정보
+   
 
     [Header("Look")]
     public Transform cameraContainer;
@@ -16,6 +16,18 @@ public class PlayerController : MonoBehaviour
     public float maxXLook;  // 최대 시야각
     private float camCurXRot;
     public float lookSensitivity; // 카메라 민감도
+
+    [Header("Ground Check")]
+    [SerializeField] private Transform groundCheckPoint;   // 땅 체크 위치(발 등)
+    [SerializeField] private float groundCheckRadius = 0.2f; // 반경
+    [SerializeField] private LayerMask groundLayerMask;     // 땅 레이어
+
+    [Header("Step Settings")]
+    [Tooltip("이 높이 이하의 단차는 스텝으로 간주하고 떨어짐으로 보지 않습니다.")]
+    [SerializeField] private float maxStepHeight = 0.3f;
+
+    [SerializeField] private float fallVelocityThreshold = 0.1f;
+    // 이 속도보다 더 빠르게 아래로 움직일 때만 falling
 
     private Vector2 mouseDelta;  // 마우스 변화값
 
@@ -109,37 +121,18 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        // 4개의 Ray를 만든다.
-        // 플레이어(transform)을 기준으로 앞뒤좌우 0.2씩 떨어뜨려서.
-        // 0.01 정도 살짝 위로 올린다.
-        // 하이라이트 부분의 차이점과 그 외 부분을 나눠서 분석해보세요.
-        Ray[] rays = new Ray[4]
-        {
-            new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
-            new Ray(transform.position + (-transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
-            new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down),
-            new Ray(transform.position + (-transform.right * 0.2f) +(transform.up * 0.01f), Vector3.down)
-        };
-
-        // 4개의 Ray 중 groundLayerMask에 해당하는 오브젝트가 충돌했는지 조회한다.
-        for (int i = 0; i < rays.Length; i++)
-        {
-            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
-            {
-                return true;          
-            }
-        }
+        if(Physics.CheckSphere(groundCheckPoint.position, groundCheckRadius, groundLayerMask)) return true;
         return false;
     }
     private void IsFalling()
     {
-        bool grounded = IsGrounded();
-        bool isFalling = !grounded && rigid.velocity.y < -0.1f; //땅에 없고 떨어지는 중이면 IsFalling = true 아니면 false
-        animator.SetBool("IsFalling", isFalling); 
+        bool isFalling = rigid.velocity.y < -0.05f;
+        animator.SetBool("IsFalling", isFalling);
     }
     public void ToggleCursor(bool toggle)
     {
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
     }
+
 }
