@@ -3,9 +3,14 @@ using TMPro;
 
 public class PlayerRayManager : MonoBehaviour
 {
+    [Header("Raycast Settings")]
     public LayerMask layerMask;
     public float maxCheckDistance = 5f;
-    private GameObject curInteractGameObject; // 현재 상호작용할 수 있는 게임 오브젝트
+
+    [Header("UI References")]
+    public TextMeshProUGUI infoText; // 아이템 정보를 표시할 텍스트
+
+    private GameObject curInteractGameObject; // 현재 상호작용할 게임 오브젝트
 
     void Update()
     {
@@ -14,29 +19,51 @@ public class PlayerRayManager : MonoBehaviour
 
     void CheckInfo()
     {
+        if (curInteractGameObject == null && !string.IsNullOrEmpty(infoText.text))
+        {
+            infoText.text = "";
+        }
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
-
         if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
         {
-            GameObject hitObj = hit.collider.gameObject;
+            var hitObj = hit.collider.gameObject;
             int itemLayer = LayerMask.NameToLayer("Item");
 
-            if (hitObj != curInteractGameObject && hitObj.layer == itemLayer)
+            // Item 레이어만 처리
+            if (hitObj.layer == itemLayer)
             {
-                curInteractGameObject = hitObj; // Raycast에 맞는 오브젝트가 다르면 교체
-                Debug.Log("Item Hit: " + hitObj.name);
+                // 새로운 오브젝트 감지 시
+                if (hitObj != curInteractGameObject)
+                {
+                    curInteractGameObject = hitObj;
+                    // Item 스크립트에서 데이터 가져와 UI에 표시
+                    var item = hitObj.GetComponent<Item>();
+                    if (item != null && item.itemData != null)
+                    {
+                        infoText.text = item.itemData.itemName + "\n" + item.itemData.itemDescription;
+                    }
+                    else
+                    {
+                        infoText.text = "";
+                    }
+                }
+                return;
             }
+
         }
-        else if (curInteractGameObject != null)
+
+        // Raycast에 맞지 않거나 다른 레이어일 때 UI 초기화
+        if (curInteractGameObject != null)
         {
-            curInteractGameObject = null; // Raycast에 맞지 않으면 null로 초기화
+            curInteractGameObject = null;
+            infoText.text = "";
         }
     }
 
-    void OnDrawGizmos() //씬에서 Raycast 시각화
-    {      
+    void OnDrawGizmos()
+    {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * maxCheckDistance);
     }

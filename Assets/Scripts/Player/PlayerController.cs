@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Accessibility;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -22,11 +23,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f; // 반경
     [SerializeField] private LayerMask groundLayerMask;     // 땅 레이어
 
-    [Header("Step Settings")]
-    [Tooltip("이 높이 이하의 단차는 스텝으로 간주하고 떨어짐으로 보지 않습니다.")]
-    [SerializeField] private float maxStepHeight = 0.3f;
-
-    [SerializeField] private float fallVelocityThreshold = 0.1f;
     // 이 속도보다 더 빠르게 아래로 움직일 때만 falling
 
     private Vector2 mouseDelta;  // 마우스 변화값
@@ -126,13 +122,22 @@ public class PlayerController : MonoBehaviour
     }
     private void IsFalling()
     {
+        if(IsGrounded())
+        {
+            animator.SetBool("IsFalling", false);
+            return;
+        }
         bool isFalling = rigid.velocity.y < -0.05f;
-        animator.SetBool("IsFalling", isFalling);
+        animator.SetBool("IsFalling", true);
     }
     public void ToggleCursor(bool toggle)
     {
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
     }
-
+    public void IsDie()
+    {
+        animator.SetTrigger("IsDie");
+        this.enabled = false; // 스크립트를 비활성화 한다.
+    }
 }
