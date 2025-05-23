@@ -62,7 +62,8 @@ public class PlayerRayManager : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+    void OnDrawGizmos() // Gizmos를 사용하여 Raycast 시각화
+
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + transform.forward * maxCheckDistance);

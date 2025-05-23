@@ -22,11 +22,11 @@ public class PlayerCondition : MonoBehaviour
 
     public void Heal(float amount)
     {
-        health.Add(amount);
+        health.Add(amount); // 체력 회복
     }
     public void Damaged(float amount)
     {
-        health.Subtract(amount);
+        health.Subtract(amount); // 체력 감소
     }
 
     public void Die()

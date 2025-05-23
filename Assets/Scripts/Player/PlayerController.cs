@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraContainer;
     public float minXLook;  // 최소 시야각
     public float maxXLook;  // 최대 시야각
-    private float camCurXRot;
+    private float camCurXRot; // 카메라 현재 x 회전값
     public float lookSensitivity; // 카메라 민감도
 
     [Header("Ground Check")]
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseDelta;  // 마우스 변화값
 
     [HideInInspector]
-    public bool canLook = true;
+    public bool canLook = true; // 카메라 회전 가능 여부
 
     private Rigidbody rigid;
     private Animator animator;
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;   
     }
 
     // 물리 연산

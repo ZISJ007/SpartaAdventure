@@ -22,19 +22,19 @@ public class ItemSlot : MonoBehaviour
 
     private void Update()
     {
-        if (useKey != KeyCode.None && Input.GetKeyDown(useKey))
+        if (useKey != KeyCode.None && Input.GetKeyDown(useKey)) // 키 입력이 있을 때
             OnUseItem();
     }
 
     private void UpdateUI()
     {
-        if (itemData != null)
+        if (itemData != null) // 슬롯에 아이템이 있을 때
         {
             Icon.sprite = itemData.Icon;
             ItemName.text = itemData.itemName;
-            CountText.text = itemCount > 1 ? itemCount.ToString() : "";
+            CountText.text = itemCount > 1 ? itemCount.ToString() : "";// 아이템 개수 표시
         }
-        else
+        else// 슬롯이 비어있을 때
         {
             Icon.sprite = null;
             ItemName.text = "";
@@ -50,27 +50,27 @@ public class ItemSlot : MonoBehaviour
         UpdateUI();
     }
 
-    public void AddCount(int amount)
+    public void AddCount(int amount) //아이템 개수 추가
     {
         itemCount += amount;
         UpdateUI();
     }
 
-    public bool HasItem(ItemData check) => itemData == check;
+    public bool HasItem(ItemData check) => itemData == check; // 슬롯에 있는 아이템과 비교
 
     public void OnUseItem()
     {
-        if (itemData == null || itemCount <= 0) return;
+        if (itemData == null || itemCount <= 0) return; // 슬롯이 비어있거나 아이템 개수가 0일 때 return
 
         var player = FindObjectOfType<PlayerController>();
         if (player != null)
         {
-            switch (itemData.abilityType)
+            switch (itemData.abilityType) // 아이템의 능력 타입에 따라
             {
-                case ItemData.itemAbilityType.SpeedUp:
+                case ItemData.itemAbilityType.SpeedUp:// 이동 속도 증가
                     StartCoroutine(SpeedBuff(player));
                     break;
-                case ItemData.itemAbilityType.JumpUp:
+                case ItemData.itemAbilityType.JumpUp:// 점프력 증가
                     StartCoroutine(JumpBuff(player));
                     break;
             }
